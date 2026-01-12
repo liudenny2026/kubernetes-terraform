@@ -1,0 +1,28 @@
+expose:
+  type: loadBalancer
+  tls:
+    enabled: true
+    certSource: auto
+    auto:
+      commonName: "harbor.local"
+
+persistence:
+  enabled: true
+  persistentVolumeClaim:
+    registry:
+      size: 50Gi
+      storageClass: "${storage_class}"
+    jobservice:
+      size: 10Gi
+      storageClass: "${storage_class}"
+    database:
+      size: 5Gi
+      storageClass: "${storage_class}"
+    redis:
+      size: 5Gi
+      storageClass: "${storage_class}"
+    trivy:
+      size: 5Gi
+      storageClass: "${storage_class}"
+
+harborAdminPassword: "${harbor_admin_password}"

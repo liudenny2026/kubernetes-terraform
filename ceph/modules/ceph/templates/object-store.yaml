@@ -1,0 +1,32 @@
+apiVersion: ceph.rook.io/v1
+kind: CephObjectStore
+metadata:
+  name: ${cluster_name}-objectstore
+  namespace: ${namespace}
+spec:
+  metadataPool:
+    replicated:
+      size: 3
+    parameters:
+      "pg_autoscale_mode": "off"
+      "pg_num": "32"
+      "pgp_num": "32"
+  dataPool:
+    replicated:
+      size: 3
+    parameters:
+      "pg_autoscale_mode": "off"
+      "pg_num": "32"
+      "pgp_num": "32"
+  gateway:
+    sslCertificateRef: ""
+    port: 80
+    securePort: 443
+    instances: 1
+    resources:
+      limits:
+        cpu: "1000m"
+        memory: "2048Mi"
+      requests:
+        cpu: "500m"
+        memory: "512Mi"

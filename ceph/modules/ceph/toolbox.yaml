@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rook-ceph-tools
+  namespace: rook-ceph
+  labels:
+    app: rook-ceph-tools
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rook-ceph-tools
+  template:
+    metadata:
+      labels:
+        app: rook-ceph-tools
+    spec:
+      dnsPolicy: ClusterFirstWithHostNet
+      containers:
+      - name: rook-ceph-tools
+        image: 192.168.40.248/library/ceph/ceph:v19.2.3
+        command: ["/bin/bash"]
+        args: ["-m", "-c", "while true; do sleep 30; done"]
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: ROOK_ADMIN_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: rook-ceph-admin-keyring
+              key: keyring
+        volumeMounts:
+        - mountPath: /dev
+          name: dev
+        - mountPath: /etc/ceph
+          name: ceph-config
+        - name: mon-host
+          mountPath: /etc/rook
+        - name: admin-keyring
+          mountPath: /var/lib/ceph
+        securityContext:
+          privileged: true
+      volumes:
+      - name: dev
+        hostPath:
+          path: /dev
+      - name: ceph-config
+        emptyDir: {}
+      - name: mon-host
+        configMap:
+          name: rook-ceph-mon-endpoints
+      - name: admin-keyring
+        secret:
+          secretName: rook-ceph-admin-keyring
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Equal"
+        value: ""
+        effect: "NoSchedule"
+      - key: "node-role.kubernetes.io/master"
+        operator: "Equal"
+        value: ""
+        effect: "NoSchedule"

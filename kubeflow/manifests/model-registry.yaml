@@ -1,0 +1,228 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: model-registry-server
+  namespace: kubeflow
+---
+apiVersion: v1
+data:
+  MODEL_REGISTRY_GRPC_SERVICE_HOST: model-registry-service
+  MODEL_REGISTRY_GRPC_SERVICE_PORT: "9090"
+  MODEL_REGISTRY_REST_SERVICE_HOST: model-registry-service
+  MODEL_REGISTRY_REST_SERVICE_PORT: "8080"
+kind: ConfigMap
+metadata:
+  labels:
+    component: model-registry-server
+  name: model-registry-configmap
+  namespace: kubeflow
+---
+apiVersion: v1
+data:
+  MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+  MYSQL_DATABASE: metadb
+  MYSQL_PORT: "3306"
+kind: ConfigMap
+metadata:
+  name: model-registry-db-parameters
+  namespace: kubeflow
+---
+apiVersion: v1
+data:
+  MYSQL_ROOT_PASSWORD: dGVzdA==
+  MYSQL_USER_NAME: cm9vdA==
+kind: Secret
+metadata:
+  name: model-registry-db-secrets
+  namespace: kubeflow
+type: Opaque
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    component: db
+  name: model-registry-db
+  namespace: kubeflow
+spec:
+  ports:
+  - name: dbapi
+    port: 3306
+    protocol: TCP
+  selector:
+    component: db
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: metadata
+  name: model-registry-service
+  namespace: kubeflow
+spec:
+  ports:
+  - appProtocol: http
+    name: http-api
+    port: 8080
+    protocol: TCP
+  - appProtocol: grpc
+    name: grpc-api
+    port: 9090
+    protocol: TCP
+  selector:
+    component: model-registry-server
+  type: ClusterIP
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: metadata-mysql
+  namespace: kubeflow
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    component: db
+  name: model-registry-db
+  namespace: kubeflow
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+      labels:
+        component: db
+      name: db
+    spec:
+      containers:
+      - args:
+        - --datadir
+        - /var/lib/mysql/datadir
+        - --default-authentication-plugin=mysql_native_password
+        envFrom:
+        - configMapRef:
+            name: model-registry-db-parameters
+        - secretRef:
+            name: model-registry-db-secrets
+        image: mysql:8.0.3
+        name: db-container
+        ports:
+        - containerPort: 3306
+          name: dbapi
+        readinessProbe:
+          exec:
+            command:
+            - /bin/bash
+            - -c
+            - mysql -D $$MYSQL_DATABASE -u$$MYSQL_USER_NAME -p$$MYSQL_ROOT_PASSWORD
+              -e 'SELECT 1'
+          initialDelaySeconds: 5
+          periodSeconds: 2
+          timeoutSeconds: 1
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: metadata-mysql
+      volumes:
+      - name: metadata-mysql
+        persistentVolumeClaim:
+          claimName: metadata-mysql
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    component: model-registry-server
+  name: model-registry-deployment
+  namespace: kubeflow
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: model-registry-server
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+        traffic.sidecar.istio.io/excludeOutboundPorts: "3306"
+      labels:
+        component: model-registry-server
+    spec:
+      containers:
+      - args:
+        - --hostname=0.0.0.0
+        - --port=$(MODEL_REGISTRY_REST_SERVICE_PORT)
+        - --mlmd-hostname=localhost
+        - --mlmd-port=$(MODEL_REGISTRY_GRPC_SERVICE_PORT)
+        command:
+        - /model-registry
+        - proxy
+        env: []
+        envFrom:
+        - configMapRef:
+            name: model-registry-configmap
+        image: kubeflow/model-registry:v0.2.9
+        livenessProbe:
+          initialDelaySeconds: 30
+          periodSeconds: 5
+          tcpSocket:
+            port: http-api
+          timeoutSeconds: 2
+        name: rest-container
+        ports:
+        - containerPort: 8080
+          name: http-api
+        readinessProbe:
+          initialDelaySeconds: 3
+          periodSeconds: 5
+          tcpSocket:
+            port: http-api
+          timeoutSeconds: 2
+      - args:
+        - --grpc_port=$(MODEL_REGISTRY_GRPC_SERVICE_PORT)
+        - --mysql_config_host=model-registry-db
+        - --mysql_config_database=$(MYSQL_DATABASE)
+        - --mysql_config_port=3306
+        - --mysql_config_user=$(MYSQL_USER_NAME)
+        - --mysql_config_password=$(MYSQL_ROOT_PASSWORD)
+        command:
+        - /bin/metadata_store_server
+        env: []
+        envFrom:
+        - configMapRef:
+            name: model-registry-db-parameters
+        - secretRef:
+            name: model-registry-db-secrets
+        - configMapRef:
+            name: model-registry-configmap
+        image: gcr.io/tfx-oss-public/ml_metadata_store_server:1.14.0
+        livenessProbe:
+          initialDelaySeconds: 3
+          periodSeconds: 5
+          tcpSocket:
+            port: grpc-api
+          timeoutSeconds: 2
+        name: grpc-container
+        ports:
+        - containerPort: 9090
+          name: grpc-api
+        readinessProbe:
+          initialDelaySeconds: 3
+          periodSeconds: 5
+          tcpSocket:
+            port: grpc-api
+          timeoutSeconds: 2
+      serviceAccountName: model-registry-server

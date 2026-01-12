@@ -1,0 +1,23 @@
+apiVersion: ceph.rook.io/v1
+kind: CephFilesystem
+metadata:
+  name: ${cluster_name}-filesystem
+  namespace: ${namespace}
+spec:
+  metadataPool:
+    replicated:
+      size: 3
+  dataPools:
+  - replicated:
+      size: 3
+    failureDomain: host
+  metadataServer:
+    activeCount: 1
+    activeStandby: true
+    resources:
+      limits:
+        cpu: "500m"
+        memory: "1024Mi"
+      requests:
+        cpu: "100m"
+        memory: "512Mi"
