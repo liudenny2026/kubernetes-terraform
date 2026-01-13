@@ -8,11 +8,14 @@ resource "kubernetes_namespace_v1" "monitoring" {
   }
 }
 
-# Deploy Prometheus Operator using local chart
+# Deploy Prometheus Operator using local chart (国内最佳实践)
 resource "helm_release" "prometheus" {
   name       = "kube-prometheus-stack"
-  chart      = "./charts/prometheus/kube-prometheus-stack-25.6.0.tgz"
+  repository = var.prometheus_repository
+  chart      = var.prometheus_chart_name
+  version    = var.prometheus_chart_version
   namespace  = kubernetes_namespace_v1.monitoring.metadata[0].name
+  timeout    = 1200
 
   set {
     name  = "namespaceOverride"
@@ -133,8 +136,6 @@ resource "helm_release" "prometheus" {
     name  = "prometheus.prometheusSpec.podMonitorSelector"
         value = "{}"
   }
-
-  timeout = 600
 
   depends_on = [kubernetes_namespace_v1.monitoring]
 }

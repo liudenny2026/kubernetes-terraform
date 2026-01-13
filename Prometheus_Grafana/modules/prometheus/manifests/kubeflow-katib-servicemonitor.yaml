@@ -2,7 +2,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: kubeflow-katib
-  namespace: ${namespace}
+  namespace: monitoring
   labels:
     app: kubeflow-katib
 spec:

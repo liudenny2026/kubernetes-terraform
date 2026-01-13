@@ -27,3 +27,7 @@ Thumbs.db
 *.tmp
 *.bak
 *.log
+
+# Unused manifests and dashboards
+modules/prometheus/manifests/
+modules/prometheus/dashboards/

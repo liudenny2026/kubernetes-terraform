@@ -11,15 +11,21 @@ variable "namespace" {
 }
 
 variable "prometheus_repository" {
-  description = "Helm repository for Prometheus"
+  description = "Helm repository for Prometheus (Alibaba Cloud for China network)"
   type        = string
-  default     = "https://prometheus-community.github.io/helm-charts"
+  default     = "https://aliacs-app-catalog.oss-cn-hangzhou.aliyuncs.com/charts-incubator/"
+}
+
+variable "prometheus_chart_name" {
+  description = "Helm chart name for Prometheus stack (ack-prometheus-operator)"
+  type        = string
+  default     = "ack-prometheus-operator"
 }
 
 variable "prometheus_chart_version" {
   description = "Prometheus chart version"
   type        = string
-  default     = "25.6.0"
+  default     = "65.1.1"
 }
 
 variable "grafana_repository" {
@@ -73,11 +79,11 @@ variable "enable_minio_monitoring" {
 variable "storage_class" {
   description = "Storage class for persistent storage"
   type        = string
-  default     = "standard"
+  default     = "local-path"
 }
 
 variable "registry_mirror" {
   description = "Container registry mirror for China"
   type        = string
-  default     = "docker.mirrors.ustc.edu.cn"
+  default     = "registry.cn-hangzhou.aliyuncs.com"
 }

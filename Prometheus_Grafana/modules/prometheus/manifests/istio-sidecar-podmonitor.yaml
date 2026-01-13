@@ -2,7 +2,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
   name: istio-sidecar
-  namespace: ${namespace}
+  namespace: monitoring
   labels:
     app: istio-sidecar
 spec:

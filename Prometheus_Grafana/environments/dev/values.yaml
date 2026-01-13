@@ -1,0 +1,87 @@
+global:
+  imageRegistry: registry.cn-hangzhou.aliyuncs.com
+
+namespaceOverride: monitoring
+
+prometheus:
+  prometheusSpec:
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: local-path
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 50Gi
+    resources:
+      requests:
+        cpu: 500m
+        memory: 2Gi
+      limits:
+        cpu: 1000m
+        memory: 4Gi
+    serviceMonitorSelectorNilUsesHelmValues: false
+    serviceMonitorNamespaceSelector: {}
+    serviceMonitorSelector: {}
+    podMonitorSelectorNilUsesHelmValues: false
+    podMonitorNamespaceSelector: {}
+    podMonitorSelector: {}
+    image:
+      registry: registry.cn-hangzhou.aliyuncs.com
+      repository: acs/prometheus
+
+grafana:
+  persistence:
+    storageClass: local-path
+    size: 10Gi
+  adminUser: admin
+  adminPassword: prom-operator
+  service:
+    type: LoadBalancer
+  image:
+    registry: registry.cn-hangzhou.aliyuncs.com
+    repository: acs/grafana
+  sidecar:
+    image:
+      registry: registry.cn-hangzhou.aliyuncs.com
+      repository: acs/k8s-sidecar
+
+alertmanager:
+  alertmanagerSpec:
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: local-path
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 10Gi
+    image:
+      registry: registry.cn-hangzhou.aliyuncs.com
+      repository: acs/alertmanager
+
+prometheusOperator:
+  image:
+    registry: registry.cn-hangzhou.aliyuncs.com
+    repository: acs/prometheus-operator
+  admissionWebhooks:
+    patch:
+      image:
+        registry: registry.cn-hangzhou.aliyuncs.com
+        repository: acs/kube-webhook-certgen
+
+kubeStateMetrics:
+  image:
+    registry: registry.cn-hangzhou.aliyuncs.com
+    repository: acs/kube-state-metrics
+
+nodeExporter:
+  image:
+    registry: registry.cn-hangzhou.aliyuncs.com
+    repository: acs/node-exporter
+
+kubelet:
+  enabled: false
+
+coreDns:
+  enabled: false

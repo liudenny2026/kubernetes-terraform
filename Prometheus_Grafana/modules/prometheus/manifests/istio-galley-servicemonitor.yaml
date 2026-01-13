@@ -2,7 +2,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: istio-galley
-  namespace: ${namespace}
+  namespace: monitoring
   labels:
     app: istio-galley
 spec:
