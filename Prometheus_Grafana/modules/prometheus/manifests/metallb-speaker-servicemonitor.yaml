@@ -1,0 +1,20 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: metallb-speaker
+  namespace: ${namespace}
+  labels:
+    app: metallb
+    component: speaker
+spec:
+  selector:
+    matchLabels:
+      app: metallb
+      component: speaker
+  namespaceSelector:
+    matchNames:
+      - metallb-system
+  endpoints:
+  - port: metrics
+    interval: 15s
+    path: /metrics

@@ -1,0 +1,4 @@
+# This is a placeholder chart file
+# Please download the actual chart from:
+# https://github.com/prometheus-community/helm-charts/releases/download/kube-prometheus-stack-25.6.0/kube-prometheus-stack-25.6.0.tgz
+# and replace this file

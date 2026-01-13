@@ -1,0 +1,20 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: mlflow-backend
+  namespace: ${namespace}
+  labels:
+    app: mlflow
+    component: backend
+spec:
+  selector:
+    matchLabels:
+      app: mlflow
+      component: backend
+  namespaceSelector:
+    matchNames:
+      - mlflow
+  endpoints:
+  - port: prometheus
+    interval: 15s
+    path: /metrics

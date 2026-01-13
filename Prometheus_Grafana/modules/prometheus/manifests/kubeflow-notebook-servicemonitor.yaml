@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: kubeflow-notebook
+  namespace: ${namespace}
+  labels:
+    app: kubeflow-notebook
+spec:
+  selector:
+    matchLabels:
+      app: jupyter-web-app
+  namespaceSelector:
+    matchNames:
+      - kubeflow
+  endpoints:
+  - port: http
+    interval: 30s
+    path: /metrics

@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: istio-sidecar
+  namespace: ${namespace}
+  labels:
+    app: istio-sidecar
+spec:
+  selector:
+    matchExpressions:
+    - key: app
+      operator: In
+      values: ["istio-proxy"]
+  namespaceSelector:
+    any: true
+  podMetricsEndpoints:
+  - port: http-monitoring
+    interval: 15s
+    path: /stats/prometheus
