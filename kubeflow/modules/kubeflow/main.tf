@@ -9,77 +9,75 @@ resource "kubernetes_namespace_v1" "kubeflow" {
 }
 
 # -----------------------------------------------------------------------------
-# 1. Cert Manager (Prerequisite)
+# Note: Helm deployments (cert-manager, istio) have been removed.
+# These components should be deployed separately using official manifests
+# if needed. Refer to official Kubeflow documentation for manual installation.
 # -----------------------------------------------------------------------------
-resource "helm_release" "cert_manager" {
-  name             = "cert-manager"
-  repository       = "https://charts.jetstack.io"
-  chart            = "cert-manager"
-  version          = var.cert_manager_version
-  namespace        = "cert-manager"
-  create_namespace = true
-  timeout          = 600
 
-  values = [
-    yamlencode({
-      installCRDs = true
-    })
-  ]
+
+# -----------------------------------------------------------------------------
+# 3. Kubeflow Spark Operator (Manifest)
+# -----------------------------------------------------------------------------
+data "kubectl_file_documents" "spark_operator" {
+  content = file("${path.module}/../../manifests/spark-operator.yaml")
+}
+
+resource "kubectl_manifest" "spark_operator" {
+  for_each  = data.kubectl_file_documents.spark_operator.documents
+  yaml_body = each.value
+  depends_on = [kubernetes_namespace_v1.kubeflow]
 }
 
 # -----------------------------------------------------------------------------
-# 2. Istio (Prerequisite)
+# 4. Spark Operator CRDs
 # -----------------------------------------------------------------------------
-resource "helm_release" "istio_base" {
-  count            = var.deploy_istio ? 1 : 0
-  name             = "istio-base"
-  repository       = "https://istio-release.storage.googleapis.com/charts"
-  chart            = "base"
-  version          = var.istio_version
-  namespace        = "istio-system"
-  create_namespace = true
-  timeout          = 600
-}
-
-resource "helm_release" "istiod" {
-  count      = var.deploy_istio ? 1 : 0
-  name       = "istiod"
-  repository = "https://istio-release.storage.googleapis.com/charts"
-  chart      = "istiod"
-  version    = var.istio_version
-  namespace  = "istio-system"
-  depends_on = [helm_release.istio_base]
-  timeout    = 600
-}
-
-resource "helm_release" "istio_ingress" {
-  count      = var.deploy_istio ? 1 : 0
-  name       = "istio-ingressgateway"
-  repository = "https://istio-release.storage.googleapis.com/charts"
-  chart      = "gateway"
-  version    = var.istio_version
-  namespace  = "istio-system"
-  depends_on = [helm_release.istiod]
-  timeout    = 600
-}
-
-# -----------------------------------------------------------------------------
-# 3. Kubeflow Spark Operator (Helm)
-# -----------------------------------------------------------------------------
-resource "helm_release" "spark_operator" {
-  name             = "spark-operator"
-  chart            = var.spark_operator_chart
-  version          = "2.4.0"
-  namespace        = "kubeflow"
-  create_namespace = true
-  timeout          = 600
-
-  values = [
-    yamlencode({
-      sparkJobNamespace = "kubeflow"
-    })
-  ]
-
+resource "kubectl_manifest" "spark_operator_crds" {
+  yaml_body = <<-EOF
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: sparkapplications.sparkoperator.k8s.io
+spec:
+  group: sparkoperator.k8s.io
+  versions:
+  - name: v1beta2
+    served: true
+    storage: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties:
+              type:
+                type: string
+              sparkVersion:
+                type: string
+              mode:
+                type: string
+              image:
+                type: string
+              restartPolicy:
+                type: object
+              volumes:
+                type: array
+              driver:
+                type: object
+              executor:
+                type: object
+          status:
+            type: object
+    subresources:
+      status: {}
+  scope: Namespaced
+  names:
+    plural: sparkapplications
+    singular: sparkapplication
+    kind: SparkApplication
+    shortNames:
+    - sparkapp
+EOF
   depends_on = [kubernetes_namespace_v1.kubeflow]
 }
 
@@ -121,7 +119,7 @@ resource "kubectl_manifest" "kserve" {
   yaml_body = each.value
 
   depends_on = [
-    helm_release.cert_manager,
+    kubernetes_namespace_v1.kubeflow
   ]
 }
 
@@ -147,7 +145,6 @@ resource "kubectl_manifest" "kfp" {
   yaml_body = each.value
   force_new = false
   depends_on = [
-    helm_release.cert_manager,
     kubernetes_namespace_v1.kubeflow
   ]
 }
@@ -161,6 +158,57 @@ data "kubectl_file_documents" "model_registry" {
 
 resource "kubectl_manifest" "model_registry" {
   for_each  = data.kubectl_file_documents.model_registry.manifests
+  yaml_body = each.value
+  depends_on = [kubernetes_namespace_v1.kubeflow]
+}
+
+# -----------------------------------------------------------------------------
+# 9. Dex Authentication (Manifests)
+# -----------------------------------------------------------------------------
+data "kubectl_file_documents" "dex" {
+  content = file(var.dex_manifest)
+}
+
+resource "kubectl_manifest" "dex" {
+  for_each  = data.kubectl_file_documents.dex.manifests
+  yaml_body = each.value
+  depends_on = [kubernetes_namespace_v1.kubeflow]
+}
+
+# -----------------------------------------------------------------------------
+# 10. Central Dashboard (Manifests)
+# -----------------------------------------------------------------------------
+data "kubectl_file_documents" "centraldashboard" {
+  content = file(var.centraldashboard_manifest)
+}
+
+resource "kubectl_manifest" "centraldashboard" {
+  for_each  = data.kubectl_file_documents.centraldashboard.manifests
+  yaml_body = each.value
+  depends_on = [kubernetes_namespace_v1.kubeflow]
+}
+
+# -----------------------------------------------------------------------------# 11. Jupyter Web App (Manifests)# -----------------------------------------------------------------------------
+data "kubectl_file_documents" "jupyter_web_app" {
+  content = file(var.jupyter_web_app_manifest)
+}
+
+resource "kubectl_manifest" "jupyter_web_app" {
+  for_each  = data.kubectl_file_documents.jupyter_web_app.manifests
+  yaml_body = each.value
+  depends_on = [
+    kubernetes_namespace_v1.kubeflow,
+    kubectl_manifest.centraldashboard
+  ]
+}
+
+# -----------------------------------------------------------------------------# 12. Profile Controller (Manifests)# -----------------------------------------------------------------------------
+data "kubectl_file_documents" "profile_controller" {
+  content = file(var.profile_controller_manifest)
+}
+
+resource "kubectl_manifest" "profile_controller" {
+  for_each  = data.kubectl_file_documents.profile_controller.manifests
   yaml_body = each.value
   depends_on = [kubernetes_namespace_v1.kubeflow]
 }

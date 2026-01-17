@@ -23,6 +23,18 @@ Please manually download the following files and place them in the `manifests/` 
     *   **URL**: `https://github.com/kubeflow/model-registry/releases/download/v0.2.0/model-registry.yaml`
     *   **Save as**: `manifests/model-registry.yaml`
 
+6.  **Dex Authentication**
+    *   **URL**: `https://github.com/kubeflow/manifests/releases/download/v1.9.1/dex.yaml`
+    *   **Save as**: `manifests/dex.yaml`
+
+7.  **Central Dashboard**
+    *   **URL**: `https://github.com/kubeflow/manifests/releases/download/v1.9.1/centraldashboard.yaml`
+    *   **Save as**: `manifests/centraldashboard.yaml`
+
+8.  **Jupyter Web App**
+    *   **URL**: `https://github.com/kubeflow/manifests/releases/download/v1.9.1/jupyter-web-app.yaml`
+    *   **Save as**: `manifests/jupyter-web-app.yaml`
+
 ## After Downloading
 
 1.  Navigate to your environment directory: `cd environments/dev` (or prod/stage)

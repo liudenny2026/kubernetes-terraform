@@ -1935,7 +1935,7 @@ spec:
         application-crd-id: kubeflow-pipelines
     spec:
       containers:
-      - image: gcr.io/ml-pipeline/visualization-server:2.3.0
+      - image: gcr.io/ml-pipeline/visualization-server:2.2.0
         imagePullPolicy: IfNotPresent
         livenessProbe:
           exec:

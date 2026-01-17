@@ -1,0 +1,63 @@
+# 以下是需要补充的kubeflow镜像列表
+
+# 从required_images.txt中提取的镜像列表
+# 1→quay.io/jetstack/cert-manager-controller:v1.16.1
+# 2→quay.io/jetstack/cert-manager-webhook:v1.16.1
+# 3→quay.io/jetstack/cert-manager-cainjector:v1.16.1
+# 4→quay.io/jetstack/cert-manager-startupapicheck:v1.16.1
+# 5→docker.io/istio/pilot:1.28.0
+# 6→docker.io/istio/proxyv2:1.28.0
+# 7→docker.io/kubeflow/spark-operator/controller:2.4.0
+# 8→docker.io/kubeflow/spark-operator/kubectl:2.4.0
+# 9→docker.io/kubeflow/training-operator:v1.8.1
+# 10→docker.io/kubeflow/katib-controller:v0.16.0
+# 11→docker.io/kubeflow/katib-db-manager:v0.16.0
+# 12→docker.io/kubeflow/katib-ui:v0.16.0
+# 13→docker.io/mysql:8.0.32
+# 14→docker.io/kserve/kserve-controller:v0.13.0
+# 15→docker.io/kserve/kserve-agent:v0.13.0
+# 16→gcr.io/kubebuilder/kube-rbac-proxy:v0.13.1
+# 17→gcr.io/ml-pipeline/api-server:2.3.0
+# 18→gcr.io/ml-pipeline/persistenceagent:2.3.0
+# 19→gcr.io/ml-pipeline/scheduledworkflow:2.3.0
+# 20→gcr.io/ml-pipeline/frontend:2.3.0
+# 21→gcr.io/ml-pipeline/viewer-crd-controller:2.3.0
+# 22→gcr.io/ml-pipeline/visualization-server:2.2.0
+# 23→gcr.io/ml-pipeline/cache-server:2.3.0
+# 24→gcr.io/ml-pipeline/metadata-writer:2.3.0
+# 25→gcr.io/tfx-oss-public/ml_metadata_store_server:1.14.0
+# 26→docker.io/minio/minio:RELEASE.2023-01-25T00-19-54Z
+# 27→gcr.io/ml-pipeline/workflow-controller:v3.4.3-patch
+# 28→docker.io/kubeflow/model-registry:v0.2.9
+# 29→docker.io/kubeflow/centraldashboard:v1.9.0
+# 30→docker.io/kubeflow/kubeflow:jupyter-web-app-v1.9.0
+# 31→ghcr.io/dexidp/dex:v2.37.0
+# 32→gcr.io/ml-pipeline/cache-deployer:2.3.0
+# 33→gcr.io/ml-pipeline/metadata-envoy:2.3.0
+# 34→gcr.io/ml-pipeline/mysql:8.0.26
+# 35→gcr.io/ml-pipeline/minio:RELEASE.2019-08-14T20-37-41Z-license-compliance
+# 36→kserve/storage-initializer:v0.13.0
+# 37→kserve/router:v0.13.0
+# 38→kserve/art-explainer
+# 39→ghcr.io/kubeflow/kubeflow/notebook-servers/base:latest
+# 40→kubeflownotebookswg/notebook-controller:v1.9.0
+# 41→kubeflownotebookswg/centraldashboard:v1.9.2
+
+# 以下是需要补充的镜像列表：
+quay.io/jetstack/cert-manager-startupapicheck:v1.16.1
+docker.io/kubeflow/spark-operator/kubectl:2.4.0
+docker.io/kubeflow/training-operator:v1.8.1
+docker.io/kubeflow/katib-controller:v0.16.0
+docker.io/kubeflow/katib-db-manager:v0.16.0
+docker.io/kubeflow/katib-ui:v0.16.0
+docker.io/mysql:8.0.32
+docker.io/kserve/kserve-agent:v0.13.0
+gcr.io/ml-pipeline/cache-server:2.3.0
+docker.io/minio/minio:RELEASE.2023-01-25T00-19-54Z
+gcr.io/ml-pipeline/workflow-controller:v3.4.3-patch
+docker.io/kubeflow/centraldashboard:v1.9.0
+docker.io/kubeflow/kubeflow:jupyter-web-app-v1.9.0
+gcr.io/ml-pipeline/cache-deployer:2.3.0
+kserve/storage-initializer:v0.13.0
+kserve/router:v0.13.0
+kserve/art-explainer

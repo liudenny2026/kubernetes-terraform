@@ -1,0 +1,93 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: profile-controller
+  namespace: kubeflow
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: profile-controller-role
+rules:
+- apiGroups: [""]
+  resources: ["namespaces", "serviceaccounts", "secrets", "configmaps", "events"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["rbac.authorization.k8s.io"]
+  resources: ["clusterroles", "clusterrolebindings", "roles", "rolebindings"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["kubeflow.org"]
+  resources: ["profiles", "profiles/status", "profiles/finalizers"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["monitoring.coreos.com"]
+  resources: ["servicemonitors", "prometheusrules"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: profile-controller-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: profile-controller-role
+subjects:
+- kind: ServiceAccount
+  name: profile-controller
+  namespace: kubeflow
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: profile-controller
+  namespace: kubeflow
+  labels:
+    app: profile-controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: profile-controller
+  template:
+    metadata:
+      labels:
+        app: profile-controller
+    spec:
+      serviceAccountName: profile-controller
+      containers:
+      - name: profile-controller
+        image: docker.io/kubeflownotebookswg/centraldashboard:v1.9.0
+        ports:
+        - containerPort: 8080
+        command:
+        - /bin/sh
+        - -c
+        - sleep infinity
+        env:
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: PROFILE_NAMESPACE_LABEL
+          value: ""  # This will use the default "kubeflow-userid"
+        - name: PROFILE_CONTROLLER_USERID_HEADER
+          value: "kubeflow-userid"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: profile-controller-service
+  namespace: kubeflow
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app: profile-controller
+  type: ClusterIP

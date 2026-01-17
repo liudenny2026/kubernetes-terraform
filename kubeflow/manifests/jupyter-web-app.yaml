@@ -1,0 +1,76 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jupyter-web-app-config
+  namespace: kubeflow
+data:
+  config.yaml: |
+    apiServerHost: ""
+    clusterDomain: cluster.local
+    customLogoFile: ""
+    customLogoUrl: ""
+    namespace: kubeflow
+    notebookControllerNamespace: kubeflow
+    uiConfigMap: jupyter-web-app-ui-config
+    userIDHeader: kubeflow-userid
+    userIDPrefix: ""
+    verifyUserIDHeader: false
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jupyter-web-app-ui-config
+  namespace: kubeflow
+data:
+  ui-config.yaml: |
+    jupyterWebApp:
+      title: "Kubeflow Notebooks"
+      logoUrl: ""
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jupyter-web-app-deployment
+  namespace: kubeflow
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jupyter-web-app
+  template:
+    metadata:
+      labels:
+        app: jupyter-web-app
+    spec:
+      containers:
+      - name: jupyter-web-app
+        image: kubeflow/kubeflow:jupyter-web-app-v1.9.0
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: config
+          mountPath: /etc/config
+          readOnly: true
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+      volumes:
+      - name: config
+        configMap:
+          name: jupyter-web-app-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jupyter-web-app-service
+  namespace: kubeflow
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app: jupyter-web-app
