@@ -1,0 +1,14 @@
+# ============================================================================
+# Kube-hunter Security Module - Provider Versions
+# ============================================================================
+
+terraform {
+  required_version = ">= 1.5.0"
+
+  required_providers {
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = ">= 2.24.0"
+    }
+  }
+}
