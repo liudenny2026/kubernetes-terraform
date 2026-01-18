@@ -13,7 +13,7 @@ variable "release_name" {
 variable "chart_version" {
   description = "Cert-Manager Helm chart version"
   type        = string
-  default     = "1.13.2"
+  default     = "1.16.2"
 }
 
 variable "namespace" {
@@ -43,7 +43,7 @@ variable "image_repository" {
 variable "image_tag" {
   description = "Docker image tag for cert-manager"
   type        = string
-  default     = "v1.13.2"
+  default     = "v1.16.2"
 }
 
 variable "create_service_account" {

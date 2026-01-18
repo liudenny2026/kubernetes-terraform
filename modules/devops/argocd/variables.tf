@@ -24,14 +24,14 @@ variable "namespace" {
 # ArgoCD Helm chart版本
 variable "chart_version" {
   type        = string
-  default     = "5.33.0"
+  default     = "7.8.12"
   description = "ArgoCD Helm chart版本"
 }
 
 # ArgoCD镜像仓库
 variable "image_repository" {
   type        = string
-  default     = "registry.cn-hangzhou.aliyuncs.com/argoproj"
+  default     = "quay.io/argoproj"
   description = "ArgoCD镜像仓库"
 }
 

@@ -59,7 +59,7 @@ resource "kubernetes_namespace" "rook_ceph_helm" {
     for_each = var.registry_mirror != "" ? [1] : []
     content {
       name  = "image.repository"
-      value = "registry.cn-hangzhou.aliyuncs.com/rook/ceph"
+      value = "rook/ceph"
     }
   }
 
@@ -69,7 +69,7 @@ resource "kubernetes_namespace" "rook_ceph_helm" {
     for_each = var.registry_mirror != "" ? [1] : []
     content {
       name  = "csi.rbd.provisioner.image.repository"
-      value = "registry.cn-hangzhou.aliyuncs.com/rook/csi-rbdplugin-provisioner"
+      value = "rook/csi-rbdplugin-provisioner"
     }
   }
 
@@ -77,7 +77,7 @@ resource "kubernetes_namespace" "rook_ceph_helm" {
     for_each = var.registry_mirror != "" ? [1] : []
     content {
       name  = "csi.rbd.plugin.image.repository"
-      value = "registry.cn-hangzhou.aliyuncs.com/rook/csi-rbdplugin"
+      value = "rook/csi-rbdplugin"
     }
   }
 
@@ -85,7 +85,7 @@ resource "kubernetes_namespace" "rook_ceph_helm" {
     for_each = var.registry_mirror != "" ? [1] : []
     content {
       name  = "csi.cephFS.provisioner.image.repository"
-      value = "registry.cn-hangzhou.aliyuncs.com/rook/csi-cephfsplugin-provisioner"
+      value = "rook/csi-cephfsplugin-provisioner"
     }
   }
 
@@ -93,7 +93,7 @@ resource "kubernetes_namespace" "rook_ceph_helm" {
     for_each = var.registry_mirror != "" ? [1] : []
     content {
       name  = "csi.cephFS.plugin.image.repository"
-      value = "registry.cn-hangzhou.aliyuncs.com/rook/csi-cephfsplugin"
+      value = "rook/csi-cephfsplugin"
     }
   }
 }
@@ -127,7 +127,7 @@ resource "kubernetes_namespace" "rook_ceph_helm" {
     for_each = var.registry_mirror != "" ? [1] : []
     content {
       name  = "cephClusterSpec.cephVersion.image"
-      value = "registry.cn-hangzhou.aliyuncs.com/ceph/ceph:${var.ceph_version}"
+      value = "ceph/ceph:${var.ceph_version}"
     }
   }
   

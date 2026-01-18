@@ -62,3 +62,7 @@ Thumbs.db
 # Terraform Cloud
 .terraformrc
 terraform.rc
+
+#pycharm
+.idea/
+.idea/workspace.xml

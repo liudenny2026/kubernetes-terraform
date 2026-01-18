@@ -35,7 +35,7 @@ variable "image_repository" {
 variable "image_tag" {
   description = "Metrics Server image tag"
   type        = string
-  default     = "v0.6.4"
+  default     = "v0.7.2"
 }
 
 variable "image_pull_policy" {
@@ -60,7 +60,7 @@ variable "chart" {
 variable "chart_version" {
   description = "Helm chart version"
   type        = string
-  default     = "3.12.2"
+  default     = "3.12.3"
 }
 
 # 资源请求和限�?variable "resources_requests_cpu" {

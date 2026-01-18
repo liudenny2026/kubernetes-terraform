@@ -24,7 +24,7 @@ variable "namespace" {
 # Istio Helm Chart版本
 variable "chart_version" {
   type        = string
-  default     = "1.28.2"
+  default     = "1.24.2"
   description = "Istio Helm Chart版本"
 }
 

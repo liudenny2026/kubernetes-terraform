@@ -43,7 +43,7 @@ variable "prometheus_chart_name" {
 variable "prometheus_chart_version" {
   description = "Prometheus chart version"
   type        = string
-  default     = "65.1.1"
+  default     = "71.2.2"
 }
 
 # Grafana仓库地址
@@ -57,7 +57,7 @@ variable "grafana_repository" {
 variable "grafana_chart_version" {
   description = "Grafana chart version"
   type        = string
-  default     = "7.3.9"
+  default     = "11.4.1"
 }
 
 # 存储�?variable "storage_class" {
@@ -70,7 +70,7 @@ variable "grafana_chart_version" {
 variable "registry_mirror" {
   description = "Container registry mirror for China"
   type        = string
-  default     = "registry.cn-hangzhou.aliyuncs.com"
+  default     = ""
 }
 
 # Prometheus存储大小

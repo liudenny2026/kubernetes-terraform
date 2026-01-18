@@ -24,7 +24,7 @@ variable "namespace" {
 # Helm Chart版本
 variable "chart_version" {
   type        = string
-  default     = "5.0.13"
+  default     = "5.1.0"
   description = "MinIO Helm Chart版本"
 }
 
@@ -38,7 +38,7 @@ variable "image_repository" {
 # 镜像标签
 variable "image_tag" {
   type        = string
-  default     = "RELEASE.2024-05-28T15-26-55Z"
+  default     = "RELEASE.2025-01-10T16-14-49Z"
   description = "MinIO镜像标签"
 }
 

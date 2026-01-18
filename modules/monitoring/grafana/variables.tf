@@ -36,7 +36,7 @@ variable "chart" {
 
 variable "chart_version" {
   type        = string
-  default     = "7.0.0"
+  default     = "11.4.1"
   description = "Helm chart version"
 }
 

@@ -24,7 +24,7 @@ variable "namespace" {
 variable "kubeflow_version" {
   description = "Kubeflow version"
   type        = string
-  default     = "1.8.0"
+  default     = "1.10.1"
 }
 
 variable "pipelines_replicas" {

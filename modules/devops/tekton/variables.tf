@@ -29,7 +29,7 @@ variable "namespace" {
 variable "tekton_image_repository" {
   description = "Tekton base image repository"
   type        = string
-  default     = "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/controller"
+  default     = "ghcr.io/tektoncd/pipeline/cmd/controller"
 }
 
 variable "tekton_image_tag" {
@@ -41,7 +41,7 @@ variable "tekton_image_tag" {
 variable "tekton_dashboard_image_repository" {
   description = "Tekton Dashboard image repository"
   type        = string
-  default     = "gcr.io/tekton-releases/github.com/tektoncd/dashboard/cmd/dashboard"
+  default     = "ghcr.io/tektoncd/dashboard/cmd/dashboard"
 }
 
 variable "tekton_dashboard_image_tag" {
@@ -66,19 +66,19 @@ variable "tekton_repository" {
 variable "tekton_pipelines_version" {
   description = "Helm chart version for Tekton Pipelines"
   type        = string
-  default     = "0.69.0"
+  default     = "0.76.0"
 }
 
 variable "tekton_dashboard_version" {
   description = "Helm chart version for Tekton Dashboard"
   type        = string
-  default     = "0.45.0"
+  default     = "0.53.0"
 }
 
 variable "tekton_triggers_version" {
   description = "Helm chart version for Tekton Triggers"
   type        = string
-  default     = "0.38.0"
+  default     = "0.41.0"
 }
 
 # 服务配置

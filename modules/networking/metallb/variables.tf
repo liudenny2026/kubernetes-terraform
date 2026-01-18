@@ -11,7 +11,7 @@ variable "namespace" {
 variable "metallb_version" {
   description = "MetalLB版本"
   type        = string
-  default     = "v0.15.3"
+  default     = "v0.15.5"
   validation {
     condition     = length(regexall("^v[0-9]+\\.[0-9]+\\.[0-9]+$|^main$|^master$", var.metallb_version)) > 0
     error_message = "版本必须符合语义化版本格式或指定分支名"

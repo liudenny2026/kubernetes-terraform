@@ -24,7 +24,7 @@ variable "namespace" {
 # Harbor Helm Chart版本
 variable "chart_version" {
   type        = string
-  default     = "1.18.1"
+  default     = "1.16.0"
   description = "Harbor Helm Chart版本"
 }
 

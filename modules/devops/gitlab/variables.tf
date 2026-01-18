@@ -24,14 +24,14 @@ variable "namespace" {
 # GitLab Helm Chart版本
 variable "chart_version" {
   type        = string
-  default     = "6.11.0"
+  default     = "8.10.0"
   description = "GitLab Helm Chart版本"
 }
 
 # GitLab版本
 variable "gitlab_version" {
   type        = string
-  default     = "18.6.0"
+  default     = "17.9.0"
   description = "GitLab版本"
 }
 
@@ -58,14 +58,14 @@ variable "pvc_size" {
 # 是否使用私有仓库
 variable "use_private_registry" {
   type        = bool
-  default     = true
+  default     = false
   description = "是否使用私有仓库获取镜像"
 }
 
 # 私有仓库URL
 variable "private_registry_url" {
   type        = string
-  default     = "192.168.40.248/library"
+  default     = "registry.gitlab.com/gitlab-org/build/cng"
   description = "私有仓库URL"
 }
 

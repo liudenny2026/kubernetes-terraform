@@ -13,7 +13,7 @@ variable "release_name" {
 variable "chart_version" {
   description = "postgresql Helm chart version"
   type        = string
-  default     = "15.2.5"
+  default     = "16.3.0"
 }
 
 variable "namespace" {

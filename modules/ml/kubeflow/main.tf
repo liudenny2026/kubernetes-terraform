@@ -225,7 +225,7 @@ resource "kubernetes_deployment" "kubeflow_pipelines" {
 
         container {
           name  = "ml-pipelines-frontend"
-          image = "gcr.io/ml-pipeline/frontend:${var.kubeflow_version}"
+          image = "quay.io/aipipeline/frontend:${var.kubeflow_version}"
 
           port {
             name           = "http"
@@ -247,7 +247,7 @@ resource "kubernetes_deployment" "kubeflow_pipelines" {
 
         container {
           name  = "ml-pipelines-api-server"
-          image = "gcr.io/ml-pipeline/api-server:${var.kubeflow_version}"
+          image = "quay.io/aipipeline/api-server:${var.kubeflow_version}"
 
           env {
             name  = "OBJECTSTORE_SERVICE"

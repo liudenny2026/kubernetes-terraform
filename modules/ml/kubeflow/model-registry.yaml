@@ -208,7 +208,7 @@ spec:
             name: model-registry-db-secrets
         - configMapRef:
             name: model-registry-configmap
-        image: gcr.io/tfx-oss-public/ml_metadata_store_server:1.14.0
+        image: gcr.io/tfx-oss-public/ml_metadata_store_server:2.20.0
         livenessProbe:
           initialDelaySeconds: 3
           periodSeconds: 5

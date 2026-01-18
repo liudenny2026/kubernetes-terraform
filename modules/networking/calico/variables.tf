@@ -29,7 +29,7 @@ variable "namespace" {
 variable "calico_version" {
   description = "Calico image version"
   type        = string
-  default     = "v3.28.0"
+  default     = "v3.29.1"
 }
 
 # Calico Helm仓库
@@ -50,7 +50,7 @@ variable "calico_chart_name" {
 variable "calico_chart_version" {
   description = "Helm chart version for Calico"
   type        = string
-  default     = "v3.28.0"
+  default     = "v3.29.1"
 }
 
 # Pod CIDR

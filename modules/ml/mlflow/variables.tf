@@ -24,7 +24,7 @@ variable "namespace" {
 variable "mlflow_version" {
   description = "MLflow image version"
   type        = string
-  default     = "2.10.0"
+  default     = "2.18.0"
 }
 
 # MLflow服务器副本数
@@ -117,14 +117,14 @@ variable "postgres_service_type" {
 variable "postgres_image_repository" {
   description = "PostgreSQL image repository address"
   type        = string
-  default     = "192.168.40.248/library/postgres"
+  default     "postgres"
 }
 
 # PostgreSQL镜像标签
 variable "postgres_image_tag" {
   description = "PostgreSQL image tag"
   type        = string
-  default     = "13-alpine"
+  default     = "17-alpine"
 }
 
 # PostgreSQL存储�?variable "postgres_storage_class" {

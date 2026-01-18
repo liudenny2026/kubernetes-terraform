@@ -942,11 +942,11 @@ data:
   LOG_LEVEL: info
   MAXIMUM_CACHE_STALENESS: ""
   appName: pipeline
-  appVersion: 2.3.0
+  appVersion: 2.8.0
   autoUpdatePipelineDefaultVersion: "true"
   bucketName: mlpipeline
   cacheDb: cachedb
-  cacheImage: gcr.io/google-containers/busybox
+  cacheImage: docker.io/library/busybox:latest
   cacheNodeRestrictions: "false"
   cronScheduleTimezone: UTC
   dbHost: mysql
@@ -1242,7 +1242,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: gcr.io/ml-pipeline/cache-deployer:2.3.0
+        image: quay.io/aipipeline/cache-deployer:2.8.0
         imagePullPolicy: Always
         name: main
       restartPolicy: Always
@@ -1332,7 +1332,7 @@ spec:
               fieldPath: metadata.namespace
         - name: WEBHOOK_PORT
           value: "8443"
-        image: gcr.io/ml-pipeline/cache-server:2.3.0
+        image: quay.io/aipipeline/cache-server:2.8.0
         imagePullPolicy: Always
         name: server
         ports:
@@ -1436,7 +1436,7 @@ spec:
             configMapKeyRef:
               key: dbPort
               name: pipeline-install-config
-        image: gcr.io/tfx-oss-public/ml_metadata_store_server:1.14.0
+        image: gcr.io/tfx-oss-public/ml_metadata_store_server:2.20.0
         livenessProbe:
           initialDelaySeconds: 3
           periodSeconds: 5
@@ -1481,7 +1481,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: gcr.io/ml-pipeline/metadata-writer:2.3.0
+        image: quay.io/aipipeline/metadata-writer:2.8.0
         name: main
       serviceAccountName: kubeflow-pipelines-metadata-writer
 ---
@@ -1521,7 +1521,7 @@ spec:
             secretKeyRef:
               key: secretkey
               name: mlpipeline-minio-artifact
-        image: gcr.io/ml-pipeline/minio:RELEASE.2019-08-14T20-37-41Z-license-compliance
+        image: quay.io/minio/minio:RELEASE.2024-05-28T15-26-55Z
         name: minio
         ports:
         - containerPort: 9000
@@ -1649,7 +1649,7 @@ spec:
             secretKeyRef:
               key: secretkey
               name: mlpipeline-minio-artifact
-        image: gcr.io/ml-pipeline/api-server:2.3.0
+        image: quay.io/aipipeline/api-server:2.8.0
         imagePullPolicy: IfNotPresent
         livenessProbe:
           exec:
@@ -1732,7 +1732,7 @@ spec:
           value: "2"
         - name: LOG_LEVEL
           value: info
-        image: gcr.io/ml-pipeline/persistenceagent:2.3.0
+        image: quay.io/aipipeline/persistenceagent:2.8.0
         imagePullPolicy: IfNotPresent
         name: ml-pipeline-persistenceagent
         resources:
@@ -1786,7 +1786,7 @@ spec:
             configMapKeyRef:
               key: cronScheduleTimezone
               name: pipeline-install-config
-        image: gcr.io/ml-pipeline/scheduledworkflow:2.3.0
+        image: quay.io/aipipeline/scheduledworkflow:2.8.0
         imagePullPolicy: IfNotPresent
         name: ml-pipeline-scheduledworkflow
       serviceAccountName: ml-pipeline-scheduledworkflow
@@ -1836,7 +1836,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: gcr.io/ml-pipeline/frontend:2.3.0
+        image: quay.io/aipipeline/frontend:2.8.0
         imagePullPolicy: IfNotPresent
         livenessProbe:
           exec:
@@ -1908,7 +1908,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: gcr.io/ml-pipeline/viewer-crd-controller:2.3.0
+        image: quay.io/aipipeline/viewer-crd-controller:2.8.0
         imagePullPolicy: Always
         name: ml-pipeline-viewer-crd
       serviceAccountName: ml-pipeline-viewer-crd-service-account
@@ -2001,7 +2001,7 @@ spec:
         env:
         - name: MYSQL_ALLOW_EMPTY_PASSWORD
           value: "true"
-        image: gcr.io/ml-pipeline/mysql:8.0.26
+        image: mysql:8.4
         name: mysql
         ports:
         - containerPort: 3306
@@ -2054,7 +2054,7 @@ spec:
             fieldRef:
               apiVersion: v1
               fieldPath: metadata.name
-        image: gcr.io/ml-pipeline/workflow-controller:v3.4.17-license-compliance
+        image: quay.io/argoproj/workflow-controller:v3.5.11
         livenessProbe:
           failureThreshold: 3
           httpGet:
