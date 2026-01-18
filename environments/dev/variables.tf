@@ -42,6 +42,19 @@ variable "versions" {
   }
 }
 
+# 集群连接配置
+variable "kubeconfig_path" {
+  description = "Path to kubeconfig file for development cluster"
+  type        = string
+  default     = "~/.kube/config"
+}
+
+variable "config_context" {
+  description = "Kubernetes config context name for development cluster"
+  type        = string
+  default     = "dev.kubernetes.cluster"
+}
+
 variable "minio_secret_key" {
   description = "MinIO secret key"
   type        = string

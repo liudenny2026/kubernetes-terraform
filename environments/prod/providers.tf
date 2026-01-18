@@ -1,6 +1,6 @@
 # ============================================================================
-# Development Environment - Provider Configuration
-# 配置Kubernetes provider连接到开发集群
+# Production Environment - Provider Configuration
+# 配置Kubernetes provider连接到生产集群
 # ============================================================================
 
 terraform {
@@ -16,17 +16,17 @@ terraform {
   }
 }
 
-# 开发集群Provider配置
+# 生产集群Provider配置
 provider "kubernetes" {
-  # 使用开发环境特定的kubeconfig路径
+  # 使用生产环境特定的kubeconfig路径
   config_path = var.kubeconfig_path
-  # 指定开发集群上下文
+  # 指定生产集群上下文
   config_context = var.config_context
 }
 
-# 开发集群别名Provider（如果需要跨集群操作）
+# 生产集群别名Provider（如果需要跨集群操作）
 provider "kubernetes" {
-  alias      = "development"
+  alias      = "production"
   config_path = var.kubeconfig_path
   config_context = var.config_context
 }
