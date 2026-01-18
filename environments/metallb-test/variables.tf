@@ -1,1 +1,41 @@
-# ============================================================================\n# MetalLB Test Environment - Variables\n# ============================================================================\n\nvariable "kubernetes_config_path" {\n  description = "Kubernetes配置文件路径"\n  type        = string\n  default     = "~/.kube/config"\n}\n\n# MetalLB配置变量\nvariable "metallb_namespace" {\n  description = "MetalLB命名空间"\n  type        = string\n  default     = "metallb-system"\n}\n\nvariable "metallb_ip_address_pool_name" {\n  description = "MetalLB IP地址池名称"\n  type        = string\n  default     = "metallb-test-pool"\n}\n\nvariable "metallb_ip_addresses" {\n  description = "MetalLB IP地址范围"\n  type        = list(string)\n  default     = ["192.168.40.200-192.168.40.210"]\n}\n\nvariable "metallb_version" {\n  description = "MetalLB版本"\n  type        = string\n  default     = "v0.15.3"\n}\n
+# ============================================================================
+# MetalLB Test Environment - Variables
+# ============================================================================
+
+# 集群连接配置
+variable "kubeconfig_path" {
+  description = "Kubernetes kubeconfig 文件路径"
+  type        = string
+  default     = "~/.kube/config"
+}
+
+variable "config_context" {
+  description = "Kubernetes 上下文名称"
+  type        = string
+  default     = ""
+}
+
+# MetalLB配置变量
+variable "metallb_namespace" {
+  description = "MetalLB命名空间"
+  type        = string
+  default     = "metallb-system"
+}
+
+variable "metallb_ip_address_pool_name" {
+  description = "MetalLB IP地址池名称"
+  type        = string
+  default     = "metallb-test-pool"
+}
+
+variable "metallb_ip_addresses" {
+  description = "MetalLB IP地址范围"
+  type        = list(string)
+  default     = ["192.168.40.200-192.168.40.210"]
+}
+
+variable "metallb_version" {
+  description = "MetalLB版本"
+  type        = string
+  default     = "v0.15.3"
+}\n
