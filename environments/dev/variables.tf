@@ -37,7 +37,7 @@ variable "versions" {
     prometheus = "15.12.0"
     grafana    = "7.3.9"
     calico     = "3.28.0"
-    metallb    = "0.14.5"
+    metallb    = "v0.15.3"
     coredns    = "1.11.1"
   }
 }

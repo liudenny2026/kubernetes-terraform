@@ -8,17 +8,48 @@ output "webhook_secret_name" {
   value       = "metallb-webhook-cert"
 }
 
-output "ip_address_pool_name" {
-  description = "IPAddressPool名称"
-  value       = var.ip_address_pool_name
+# 新增：多IP地址池输出
+output "ip_address_pools" {
+  description = "MetalLB IP地址池配置列表"
+  value       = var.ip_address_pools
 }
 
-output "ip_addresses" {
-  description = "IP地址�?
-  value       = var.ip_addresses
+# 新增：L2广告配置输出
+output "l2_advertisements" {
+  description = "MetalLB L2广告配置列表"
+  value       = var.l2_advertisements
 }
 
-output "l2_advertisement_name" {
-  description = "L2Advertisement名称"
-  value       = var.l2_advertisement_name
+# 新增：BGP对等体配置输出
+output "bgp_peers" {
+  description = "MetalLB BGP对等体配置列表"
+  value       = var.bgp_peers
+}
+
+# 新增：BGP广告配置输出
+output "bgp_advertisements" {
+  description = "MetalLB BGP广告配置列表"
+  value       = var.bgp_advertisements
+}
+
+# 模块和应用版本输出
+output "module_version" {
+  description = "MetalLB模块版本"
+  value       = "0.2.0"
+}
+
+output "metallb_version" {
+  description = "MetalLB应用版本"
+  value       = var.metallb_version
+}
+
+# 控制器和Speaker资源输出
+output "controller_deployment" {
+  description = "MetalLB控制器Deployment名称"
+  value       = "controller"
+}
+
+output "speaker_daemonset" {
+  description = "MetalLB Speaker DaemonSet名称"
+  value       = "speaker"
 }

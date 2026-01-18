@@ -1,0 +1,2 @@
+# ============================================================================\n# MetalLB Test Environment - Provider Versions\n# ============================================================================\n\nterraform {
+  required_version = ">= 1.5.0, < 2.0.0"\n\n  required_providers {\n    kubernetes = {\n      source  = "hashicorp/kubernetes"\n      version = "~> 2.20.0"\n    }\n    helm = {\n      source  = "hashicorp/helm"\n      version = "~> 2.11.0"\n    }\n  }\n}\n

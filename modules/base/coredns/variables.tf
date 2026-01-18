@@ -44,25 +44,25 @@ variable "coredns_replicas" {
 variable "coredns_cpu_request" {
   description = "CoreDNS CPU request"
   type        = string
-  default = '200m'
-}
-
-variable "coredns_memory_request" {
-  description = "CoreDNS memory request"
-  type        = string
-  default = '140Mi'
+  default     = "200m"
 }
 
 variable "coredns_cpu_limit" {
   description = "CoreDNS CPU limit"
   type        = string
-  default = '2000m'
+  default     = "200m"
+}
+
+variable "coredns_memory_request" {
+  description = "CoreDNS memory request"
+  type        = string
+  default     = "140Mi"
 }
 
 variable "coredns_memory_limit" {
   description = "CoreDNS memory limit"
   type        = string
-  default = '340Mi'
+  default     = "170Mi"
 }
 
 variable "cluster_domain" {
